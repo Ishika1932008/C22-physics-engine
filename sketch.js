@@ -1,64 +1,56 @@
-var canvas;
-var block1,block2,block3,block4;
-var ball, edges;
-var music;
+const Engine = Matter.Engine;
+const World = Matter.World;
+const Bodies = Matter.Bodies;
+var engine, world;
+var ground,ball,ball2,ball1;
 
-function preload(){
-  music = loadSound("music.mp3");
+function setup() {
+  createCanvas(400,400);
+  engine = Engine.create();
+  world = engine.world;
+
+  var ground_options = {
+    isStatic:true
+  }
+ground = Bodies.rectangle(200,390,200,20,ground_options);
+World.add(world,ground);
+
+var ball_options = {
+  restitution:1.5
 }
 
+ball = Bodies.circle(200,100,20,ball_options);
+World.add(world,ball);
 
-function setup(){
-    canvas = createCanvas(800,600);
+var ball1_options = {
+  restitution:1.0
+}
 
-    block1 = createSprite(0,580,360,30);
-    block1.shapeColor = "blue";
+ball1 = Bodies.circle(250,100,20,ball1_options);
+World.add(world,ball1);
 
-    block2 = createSprite(295,580,200,30);
-    block2.shapeColor = "orange";
+var ball2_options = {
+  restitution:2.0
+}
 
-  block3 = createSprite(495,580,200,30);
-  block3.shapeColor = "green";
-
-  block4 = createSprite(695,580,200,30);
-  block4.shapeColor = "red";
-
-    ball = createSprite(random(20,750),100, 40,40);
-    ball.shapeColor = rgb(255,255,255);
-  ball.velocityX = 5;
-  ball.velocityY = 5;
+ball2 = Bodies.circle(150,100,20,ball2_options);
+World.add(world,ball2);
 
 }
 
 function draw() {
-    background(rgb(169,169,169));
-    edges=createEdgeSprites();
-    ball.bounceOff(edges);
+  background(0);  
+  Engine.update(engine);
+  rectMode (CENTER);
+  rect (200,390,400,20);
 
-    
-    
-    if(block1.isTouching(ball) && ball.bounceOff(block1)){
-        ball.shapeColor = "blue";
-        music.play();
-    }
+  ellipseMode (RADIUS)
+  ellipse(ball.position.x,ball.position.y,20,20);
 
+  ellipseMode (RADIUS)
+  ellipse(ball1.position.x,ball1.position.y,20,20);
 
-
-    if(block2.isTouching(ball)){
-        ball.shapeColor = "orange";
-      ball.velocityX = 0;
-      ball.velocityY = 0;
-
-      music.stop();
-    }
-
-  if(ball.isTouching(block3)){
-      ball.shapeColor = "green";
-  }
-
-  if(ball.isTouching(block4)){
-    ball.shapeColor = "red ";
-}
-
-    drawSprites();
+  ellipseMode (RADIUS)
+  ellipse(ball2.position.x,ball2.position.y,20,20);
+  drawSprites();
 }
